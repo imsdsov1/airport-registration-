@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Онлайн регистрация в аэропорт</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 420px;
+            margin: 50px auto;
+            background: #000;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #ff9800;
+            color: black;
+            border: none;
+            margin-top: 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #e68900;
+        }
+
+        .result {
+            margin-top: 15px;
+            color: #00ff88;
+            text-align: center;
+        }
+
+        .saved {
+            margin-top: 15px;
+            font-size: 14px;
+            background: #111;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .bonus {
+            margin-top: 10px;
+            text-align: center;
+            color: #ffd700;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Онлайн регистрация</h2>
+
+    <label>ФИО:</label>
+    <input type="text" id="fio">
+
+    <label>ИИН:</label>
+    <input type="text" id="iin" placeholder="12 цифр">
+
+    <label>Авиакомпания:</label>
+    <select id="airline">
+        <option value="">Выберите</option>
+        <option>FlyArystan</option>
+        <option>Air Astana</option>
+        <option>SCAT Airways</option>
+    </select>
+
+    <label>Номер рейса:</label>
+    <input type="text" id="flight" placeholder="KC123">
+
+    <label>Дата вылёта:</label>
+    <input type="date" id="date">
+
+    <label>Время вылёта:</label>
+    <input type="time" id="time">
+
+    <button onclick="register()">Зарегистрироваться</button>
+    <button onclick="showData()">Показать сохранённые данные</button>
+
+    <div class="result" id="result"></div>
+    <div class="saved" id="saved"></div>
+</div>
+
+<script>
+function register() {
+    let fio = document.getElementById("fio").value;
+    let iin = document.getElementById("iin").value;
+    let airline = document.getElementById("airline").value;
+    let flight = document.getElementById("flight").value;
+    let date = document.getElementById("date").value;
+    let time = document.getElementById("time").value;
+
+    if (!fio || !iin || !airline || !flight || !date || !time) {
+        alert("Заполните все поля!");
+        return;
+    }
+
+    if (iin.length !== 12 || isNaN(iin)) {
+        alert("ИИН должен содержать 12 цифр");
+        return;
+    }
+
+    let data = { fio, iin, airline, flight, date, time };
+    localStorage.setItem("registration", JSON.stringify(data));
+
+    document.getElementById("result").innerHTML =
+        "Регистрация успешна!(разбейся)";
+}
+
+function showData() {
+    let data = localStorage.getItem("registration");
+
+    if (!data) {
+        document.getElementById("saved").innerHTML = "Нет сохранённых данных";
+        return;
+    }
+
+    let r = JSON.parse(data);
+
+    document.getElementById("saved").innerHTML =
+        "<b>Сохранённая регистрация:</b><br>" +
+        "ФИО: " + r.fio + "<br>" +
+        "ИИН: " + r.iin + "<br>" +
+        "Авиакомпания: " + r.airline + "<br>" +
+        "Рейс: " + r.flight + "<br>" +
+        "Дата: " + r.date + "<br>" +
+        "Время: " + r.time +
+        "<div class='bonus'>апай 100 бал думаю</div>";
+}
+</script>
+
+</body>
+</html>
